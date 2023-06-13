@@ -93,9 +93,43 @@
             </li>
           </ul>
         </section>
+
+        <section v-if="formSettings.displayEducation" class="cv__section">
+          <h4 class="cv__section-title cv__section-title--main">
+            {{ $t('education') }}
+          </h4>
+          <ul class="cv__event mt-3">
+            <li
+              v-for="edu in education"
+              :key="edu.title"
+              class="cv__event-elem"
+            >
+              <h5 class="cv__section-title cv__section-title--sm">
+                {{ edu.title }}
+              </h5>
+              <div>
+                <span>{{ edu.location }} | </span>
+                <span>
+                  {{ formatDate(edu.from) }} -
+                  <template v-if="edu.current">{{ $t('current') }}</template>
+                  <template v-else>{{ formatDate(edu.to) }}</template>
+                </span>
+              </div>
+              <ul v-if="edu.summaryArr.length > 1" class="cv__list">
+                <li v-for="(line, index) in edu.summaryArr" :key="index">
+                  {{ line }}
+                </li>
+              </ul>
+              <p v-else class="font-light">
+                {{ edu.summaryArr[0] }}
+              </p>
+            </li>
+          </ul>
+        </section>
+
         <!-- // LANGUAGES -->
         <!-- SOCIAL -->
-        <section class="cv__section">
+        <!-- <section class="cv__section">
           <h4 class="cv__section-title">{{ $t('social') }}</h4>
           <div class="flex flex-col">
             <div v-if="formSettings.linkedin" class="cv__icon-wrapper">
@@ -140,7 +174,7 @@
               }}</a>
             </div>
           </div>
-        </section>
+        </section> -->
         <!-- // SOCIAL -->
       </div>
       <div class="cv__main w-2/3">
@@ -176,6 +210,14 @@
                   <template v-else>{{ formatDate(job.to) }}</template>
                 </span>
               </div>
+              <div v-if="!job.current">
+                <span>{{ job.location }} | </span>
+                <span>
+                  {{ formatDate(job.from) }} -
+                  <template v-if="job.current">{{ $t('current') }}</template>
+                  <template v-else>{{ formatDate(job.to) }}</template>
+                </span>
+              </div>
               <ul v-if="job.summaryArr.length > 1" class="cv__list">
                 <li v-for="(line, index) in job.summaryArr" :key="index">
                   {{ line }}
@@ -189,44 +231,10 @@
         </section>
         <!-- // EXPERIENCE -->
 
-        <hr v-if="formSettings.displayEducation" class="cv__bar" />
+        <!-- <hr v-if="formSettings.displayEducation" class="cv__bar" /> -->
 
         <!-- EDUCATION -->
-        <section
-          v-if="formSettings.displayEducation"
-          class="cv__section cv__section--main w-full"
-        >
-          <h4 class="cv__section-title cv__section-title--main">
-            {{ $t('education') }}
-          </h4>
-          <ul class="cv__event mt-3">
-            <li
-              v-for="edu in education"
-              :key="edu.title"
-              class="cv__event-elem"
-            >
-              <h5 class="cv__section-title cv__section-title--sm">
-                {{ edu.title }}
-              </h5>
-              <div>
-                <span>{{ edu.location }} | </span>
-                <span>
-                  {{ formatDate(edu.from) }} -
-                  <template v-if="edu.current">{{ $t('current') }}</template>
-                  <template v-else>{{ formatDate(edu.to) }}</template>
-                </span>
-              </div>
-              <ul v-if="edu.summaryArr.length > 1" class="cv__list">
-                <li v-for="(line, index) in edu.summaryArr" :key="index">
-                  {{ line }}
-                </li>
-              </ul>
-              <p v-else class="font-light">
-                {{ edu.summaryArr[0] }}
-              </p>
-            </li>
-          </ul>
-        </section>
+
         <!-- // EDUCATION -->
 
         <hr v-if="formSettings.displayProjects" class="cv__bar" />
@@ -374,7 +382,7 @@ p {
     transform: scale(0.7);
   }
   &__side {
-    @apply px-6 py-10 bg-gray-100 bg-opacity-100;
+    @apply px-5 py-10 bg-gray-100 bg-opacity-100;
   }
 
   &__name {
