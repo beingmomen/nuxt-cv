@@ -20,7 +20,7 @@
       aria-label="CV preview"
       :class="['cv', 'bg-white', { blur: isLoading }]"
     >
-      <div class="cv__side w-1/3">
+      <div class="cv__side" style="width: 37%">
         <h2 class="cv__name">
           {{ formSettings.name }} {{ formSettings.lastName }}
         </h2>
@@ -37,23 +37,24 @@
                 formSettings.phoneNumber
               }}</a>
             </div>
+
             <div v-if="formSettings.email" class="cv__icon-wrapper">
               <svg class="cv__icon">
                 <use href="@/assets/sprite.svg#email"></use>
               </svg>
               <a :href="emailHref" rel="noopener">{{ formSettings.email }}</a>
             </div>
-            <div v-if="formSettings.location" class="cv__icon-wrapper">
+            <!-- <div v-if="formSettings.location" class="cv__icon-wrapper">
               <svg class="cv__icon">
                 <use href="@/assets/sprite.svg#location"></use>
               </svg>
               <span tabindex="0">{{ formSettings.location }}</span>
-            </div>
+            </div> -->
           </div>
         </section>
         <!-- //CONTACT -->
         <!-- PROFESIONAL SKILLS -->
-        <section class="cv__section">
+        <!-- <section class="cv__section">
           <h4 class="cv__section-title">{{ $t('professional-skills') }}</h4>
           <ul class="cv__tags">
             <li
@@ -64,8 +65,43 @@
               {{ skill }}
             </li>
           </ul>
-        </section>
+        </section> -->
         <!-- //PROFESIONAL SKILLS -->
+
+        <!-- EDUCATION -->
+        <section v-if="formSettings.displayEducation" class="cv__section">
+          <h4 class="cv__section-title cv__section-title--main">
+            {{ $t('education') }}
+          </h4>
+          <ul class="cv__event mt-3">
+            <li
+              v-for="edu in education"
+              :key="edu.title"
+              class="cv__event-elem"
+            >
+              <h5 class="cv__section-title cv__section-title--sm">
+                {{ edu.title }}
+              </h5>
+              <div>
+                <span>{{ edu.location }} | </span>
+                <span>
+                  {{ formatDate(edu.from) }} -
+                  <template v-if="edu.current">{{ $t('current') }}</template>
+                  <template v-else>{{ formatDate(edu.to) }}</template>
+                </span>
+              </div>
+              <ul v-if="edu.summaryArr.length > 1" class="cv__list">
+                <li v-for="(line, index) in edu.summaryArr" :key="index">
+                  {{ line }}
+                </li>
+              </ul>
+              <p v-else class="font-light">
+                {{ edu.summaryArr[0] }}
+              </p>
+            </li>
+          </ul>
+        </section>
+
         <!-- SOFT SKILLS -->
         <section class="cv__section">
           <h4 class="cv__section-title">{{ $t('soft-skills') }}</h4>
@@ -80,7 +116,7 @@
         </section>
         <!-- // SOFT SKILLS -->
         <!-- LANGUAGES -->
-        <section class="cv__section">
+        <!-- <section class="cv__section">
           <h4 class="cv__section-title">{{ $t('languages') }}</h4>
           <ul class="cv__bar">
             <li
@@ -92,7 +128,7 @@
               <span class="font-light">{{ $t(lang.level) }}</span>
             </li>
           </ul>
-        </section>
+        </section> -->
         <!-- // LANGUAGES -->
         <!-- SOCIAL -->
         <section class="cv__section">
@@ -135,15 +171,18 @@
               <svg class="cv__icon">
                 <use href="@/assets/sprite.svg#website"></use>
               </svg>
-              <a target="_blank" rel="noopener" :href="formSettings.website">{{
-                formSettings.website
-              }}</a>
+              <a
+                target="_blank"
+                rel="noopener"
+                :href="`https://${formSettings.website}`"
+                >{{ `${formSettings.website}` }}</a
+              >
             </div>
           </div>
         </section>
         <!-- // SOCIAL -->
       </div>
-      <div class="cv__main w-2/3">
+      <div class="cv__main" style="width: 63%">
         <!-- ABOUT ME -->
         <section class="cv__section cv__section--main w-full">
           <h4 class="cv__section-title cv__section-title--main">
@@ -153,6 +192,31 @@
             <!-- Avoids unnecessary spaces at the begging while still allowing break lines -->
             <span class="whitespace-pre-wrap">{{ formSettings.aboutme }}</span>
           </p>
+        </section>
+
+        <hr class="cv__bar" />
+
+        <!-- QUALIFICATIONS -->
+        <section class="cv__section cv__section--main w-full">
+          <h4 class="cv__section-title cv__section-title--main">
+            {{ $t('QUALIFICATIONS') }}
+          </h4>
+          <div class="">
+            <!-- <p>
+              Nuxt3.JS - Vue3.JS - Pinia - VueUse - JavaScript - HTML - CSS -
+              jQuery - TailwindCSS - Bootstrap - SCSS - Prisma - Vue 3 - Pug.JS
+              - Gulp.JS - API’S - Git - Github - Gitlab - Firebase
+            </p> -->
+            <div class="flex flex-wrap">
+              <p
+                v-for="skill in formSettings.jobSkills"
+                :key="`preview${skill}`"
+                class="cv__tag"
+              >
+                {{ skill }}
+              </p>
+            </div>
+          </div>
         </section>
         <!-- // ABOUT ME -->
 
@@ -189,10 +253,10 @@
         </section>
         <!-- // EXPERIENCE -->
 
-        <hr v-if="formSettings.displayEducation" class="cv__bar" />
+        <!-- <hr v-if="formSettings.displayEducation" class="cv__bar" /> -->
 
         <!-- EDUCATION -->
-        <section
+        <!-- <section
           v-if="formSettings.displayEducation"
           class="cv__section cv__section--main w-full"
         >
@@ -226,7 +290,7 @@
               </p>
             </li>
           </ul>
-        </section>
+        </section> -->
         <!-- // EDUCATION -->
 
         <hr v-if="formSettings.displayProjects" class="cv__bar" />
@@ -245,20 +309,23 @@
               :key="project.title"
               class="cv__event-elem"
             >
-              <h5 class="cv__section-title cv__section-title--sm">
+              <a
+                :href="project.location"
+                target="_blank"
+                class="cv__section-title cv__section-title--sm"
+                style="
+                  background-color: transparent;
+                  color: #000;
+                  font-weight: bold;
+                "
+              >
                 {{ project.title }}
-              </h5>
-              <div>
-                <span>{{ project.location }} | </span>
-                <span>
-                  {{ formatDate(project.from) }} -
-                  <template v-if="project.current">{{
-                    $t('current')
-                  }}</template>
-                  <template v-else>{{ formatDate(project.to) }}</template>
-                </span>
-              </div>
-              <ul v-if="project.summaryArr.length > 1" class="cv__list">
+              </a>
+              <ul
+                v-if="project.summaryArr.length > 1"
+                class=""
+                style="list-style: none"
+              >
                 <li v-for="(line, index) in project.summaryArr" :key="index">
                   {{ line }}
                 </li>
@@ -266,6 +333,16 @@
               <p v-else class="font-light">
                 {{ project.summaryArr[0] }}
               </p>
+              <div>
+                <!-- <span>{{ project.location }} </span> -->
+                <!-- <span>
+                  {{ formatDate(project.from) }} -
+                  <template v-if="project.current">{{
+                    $t('current')
+                  }}</template>
+                  <template v-else>{{ formatDate(project.to) }}</template>
+                </span> -->
+              </div>
             </li>
           </ul>
         </section>
