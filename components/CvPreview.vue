@@ -52,21 +52,6 @@
             </div> -->
           </div>
         </section>
-        <!-- //CONTACT -->
-        <!-- PROFESIONAL SKILLS -->
-        <!-- <section class="cv__section">
-          <h4 class="cv__section-title">{{ $t('professional-skills') }}</h4>
-          <ul class="cv__tags">
-            <li
-              v-for="skill in formSettings.jobSkills"
-              :key="`preview${skill}`"
-              class="cv__tag"
-            >
-              {{ skill }}
-            </li>
-          </ul>
-        </section> -->
-        <!-- //PROFESIONAL SKILLS -->
 
         <!-- EDUCATION -->
         <section v-if="formSettings.displayEducation" class="cv__section">
@@ -102,6 +87,22 @@
           </ul>
         </section>
 
+        <!-- //CONTACT -->
+        <!-- PROFESIONAL SKILLS -->
+        <section class="cv__section">
+          <h4 class="cv__section-title">QUALIFICATIONS</h4>
+          <ul class="cv__tags">
+            <li
+              v-for="skill in formSettings.jobSkills"
+              :key="`preview${skill}`"
+              class="cv__tag"
+            >
+              {{ skill }}
+            </li>
+          </ul>
+        </section>
+        <!-- //PROFESIONAL SKILLS -->
+
         <!-- SOFT SKILLS -->
         <section class="cv__section">
           <h4 class="cv__section-title">{{ $t('soft-skills') }}</h4>
@@ -134,6 +135,17 @@
         <section class="cv__section">
           <h4 class="cv__section-title">{{ $t('social') }}</h4>
           <div class="flex flex-col">
+            <div v-if="formSettings.website" class="cv__icon-wrapper">
+              <svg class="cv__icon">
+                <use href="@/assets/sprite.svg#website" target="_blank"></use>
+              </svg>
+              <a
+                target="_blank"
+                rel="noopener"
+                :href="`https://${formSettings.website}`"
+                >{{ `${formSettings.website}` }}</a
+              >
+            </div>
             <div v-if="formSettings.linkedin" class="cv__icon-wrapper">
               <svg class="cv__icon">
                 <use href="@/assets/sprite.svg#linkedin-color"></use>
@@ -167,17 +179,6 @@
                 >{{ `github.com/${formSettings.github}` }}</a
               >
             </div>
-            <div v-if="formSettings.website" class="cv__icon-wrapper">
-              <svg class="cv__icon">
-                <use href="@/assets/sprite.svg#website"></use>
-              </svg>
-              <a
-                target="_blank"
-                rel="noopener"
-                :href="`https://${formSettings.website}`"
-                >{{ `${formSettings.website}` }}</a
-              >
-            </div>
           </div>
         </section>
         <!-- // SOCIAL -->
@@ -194,19 +195,15 @@
           </p>
         </section>
 
-        <hr class="cv__bar" />
+        <!-- <hr class="cv__bar" /> -->
 
         <!-- QUALIFICATIONS -->
-        <section class="cv__section cv__section--main w-full">
+        <!-- <section class="cv__section cv__section--main w-full">
           <h4 class="cv__section-title cv__section-title--main">
             {{ $t('QUALIFICATIONS') }}
           </h4>
           <div class="">
-            <!-- <p>
-              Nuxt3.JS - Vue3.JS - Pinia - VueUse - JavaScript - HTML - CSS -
-              jQuery - TailwindCSS - Bootstrap - SCSS - Prisma - Vue 3 - Pug.JS
-              - Gulp.JS - API’S - Git - Github - Gitlab - Firebase
-            </p> -->
+
             <div class="flex flex-wrap">
               <p
                 v-for="skill in formSettings.jobSkills"
@@ -217,7 +214,7 @@
               </p>
             </div>
           </div>
-        </section>
+        </section> -->
         <!-- // ABOUT ME -->
 
         <hr class="cv__bar" />
